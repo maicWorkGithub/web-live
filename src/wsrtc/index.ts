@@ -80,7 +80,6 @@ class WsRtc extends EventBus implements ILiveInterface{
     private joinChannelEventListener:(obj:any)=>void;
     constructor(){
         super();
-        WSWebRTC.WSEmitter.listenTo(Event.SKIN_EVENT,this.skinEventListener.bind(this));
     }
     private skinEventListener(obj:any){
         if(!obj) return;
@@ -130,6 +129,7 @@ class WsRtc extends EventBus implements ILiveInterface{
             }, (rsp) => {
                 if(rsp.code === 0) {
                     WSWebRTC.WSChannel.init({});
+                    WSWebRTC.WSEmitter.listenTo(Event.SKIN_EVENT,this.skinEventListener.bind(this));
                     resolve(true);
                 }else{
                     reject(false);

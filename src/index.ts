@@ -1,5 +1,6 @@
 import {ILiveInterface} from './interface';
 import {IChannelConfig, IWsRtcConfig, WsRtc} from './wsrtc';
+import {EventBus} from './EventBus';
 
 // @ts-ignore
 require("./adapter.js");
@@ -13,9 +14,10 @@ export enum LiveMode {
 
 const WsRtcInstance = new WsRtc();
 
-class WebLive implements ILiveInterface{
-    private mode:LiveMode;
+class WebLive extends EventBus implements ILiveInterface{
+    protected mode:LiveMode;
     constructor(mode:LiveMode) {
+        super();
         this.mode=mode;
     }
     public init(config: IWsRtcConfig): void{
@@ -57,6 +59,12 @@ class WebLive implements ILiveInterface{
     playMix():void{
         return WsRtcInstance.playMix();
     }
+    public on(event:string,callback:any){
+        return WsRtcInstance.on(event,callback);
+    }
+    public off(event:string,callback:any){
+        return WsRtcInstance.off(event,callback);
+    }
 }
 
 
@@ -71,5 +79,7 @@ class SingleWebLive {
         }
     }
 }
+
+export {EventEnum} from "./wsrtc";
 
 export {SingleWebLive}

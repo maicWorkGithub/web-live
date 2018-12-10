@@ -6,7 +6,6 @@
  * @time：2018/4/12 13:54
  */
 const WSWebRTC=require("./wsrtc.min.js");
-require("./adapter.js");
 export {
     WSWebRTC
 }
