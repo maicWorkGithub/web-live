@@ -37,7 +37,7 @@ declare class WSEmitter {
     listenTo(eventName: string, callback: Function): void;
     removeTo(eventName: string, callback: Function): void;
     removeToAll(): void;
-    trigger(eventName: string,...data:any): void;
+    trigger(eventName: string,data:any): void;
 }
 
 
@@ -117,7 +117,7 @@ declare interface MixConfig{
     resolution:Resolution;
     maxBitrate?:number;
     framerate?:number;
-    sei:boolean;
+    sei:boolean|0|1;
     fill?:0|1|2;
     idle?:number;
     layoutIndex?:number;

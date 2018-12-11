@@ -1,4 +1,4 @@
-import {IChannelConfig, IWsRtcConfig} from './wsrtc';
+import {IChannelConfig, IMixConfig, IWsRtcConfig} from './wsrtc';
 
 interface ILiveInterface {
     init(config:IWsRtcConfig):void;
@@ -8,10 +8,11 @@ interface ILiveInterface {
     joinChannel(channelConfig:IChannelConfig):Promise<boolean>;
     leaveChannel():Promise<boolean>;
     startMix():Promise<boolean>;
-    updateMix():Promise<boolean>;
+    createMix(mixConfig:IMixConfig):Promise<boolean>;
+    updateMix(mixConfig:IMixConfig):Promise<boolean>;
     stopMix():Promise<boolean>;
     shareDesktop():void;
     stopDesktop():void;
-    play():void;
+    play(url:string,secCallback:(timestamp:number)=>void):void;
     playMix():void;
 }

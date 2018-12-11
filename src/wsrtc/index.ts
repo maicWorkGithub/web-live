@@ -48,12 +48,38 @@ export declare interface IChannelConfig {
     sei?:boolean;
     isBrControl?:boolean;
     mix?:boolean;
+    idle?:number;
+}
+
+declare interface IMixPeer{
+    layout_index:number;
+    userId:string;
+}
+declare interface IMixLayout{
+    x:number;
+    y:number;
+    width:number;
+    height:number;
+}
+
+export declare interface IMixConfig {
+    layout:0|1|2|11|22;
+    resolution:{width:number;height:number};
+    maxBitrate?:number;
+    framerate?:number;
+    sei:0|1;
+    fill:0|1|2;
+    idle?:number;// 合流销毁
+    peers:IMixPeer[];
+    layoutIndex:number;
+    layoutContent:IMixLayout[]
 }
 
 const SkinEvent=WSWebRTC.WSEvent.SkinEvent;
 const Event=WSWebRTC.WSEvent.Event;
 const LinkEvent = WSWebRTC.WSEvent.LinkEvent;
 const MixEvent = WSWebRTC.WSEvent.MixEvent;
+const PlayEvent=WSWebRTC.WSEvent.PlayEvent;
 
 
 export enum EventEnum {
@@ -61,6 +87,12 @@ export enum EventEnum {
     PushSuccess="push:success",
     StopPullSuccess="pull:stop",
     StopPushSuccess="push:stop",
+    PlaySuccess="play:success",
+    PlayEnd="play:end",
+    PlayError="play:error",
+    PlayMetadata="play:metadata",
+    PlayInterrupt="play:interrupt",
+    PlayResolutionChange="play:resolution",
 }
 
 
@@ -78,8 +110,47 @@ class WsRtc extends EventBus implements ILiveInterface{
     private createChannelEventListener:(obj:any)=>void;
     private destroyChannelEventListener:(obj:any)=>void;
     private joinChannelEventListener:(obj:any)=>void;
+    private createMixEventListener:(obj:any)=>void;
+    private updateMixEventListener:(obj:any)=>void;
     constructor(){
         super();
+    }
+    private playEventListener(obj:any){
+        if(!obj) return;
+        const {type,data}=obj;
+        switch (type){
+            case PlayEvent.ERROR://异常
+                this.trigger(EventEnum.PlayError);
+                break;
+            case PlayEvent.METADATA://视屏元数据信息
+                this.trigger(EventEnum.PlayMetadata,{
+                    width:data.width,
+                    height:data.height
+                });
+                break;
+            case PlayEvent.SOCKET_OPEN://接收数据
+                break;
+            case PlayEvent.SOCKET_CLOSE://异常中断
+                this.trigger(EventEnum.PlayInterrupt);
+                break;
+            case PlayEvent.DURATION_WARNING://警告
+                break;
+            case PlayEvent.RESOLUTION_CHANGE://分辨率改变
+            
+                if(!data.isHeader) {
+                    const resolution=data.aspect2.split("x");
+                    this.trigger(EventEnum.PlayResolutionChange,{
+                        width:resolution[0],
+                        height:resolution[1]
+                    });
+                } else {
+                    this.trigger(EventEnum.PlayResolutionChange,{
+                        width:data.aspect1,
+                        height:data.aspect2
+                    });
+                }
+                break;
+        }
     }
     private skinEventListener(obj:any){
         if(!obj) return;
@@ -92,13 +163,19 @@ class WsRtc extends EventBus implements ILiveInterface{
             if(message==="Push"){
                 this.trigger(EventEnum.PushSuccess,wrap);
             }
+            if(message==="Play"){
+                this.trigger(EventEnum.PlaySuccess,wrap);
+            }
         } else if(type === SkinEvent.REMOVE) {
             const id=obj.data;
-            if(obj.message==="Pull"){
+            if(message==="Pull"){
                 this.trigger(EventEnum.StopPullSuccess,id);
             }
-            if(obj.message==="Push"){
+            if(message==="Push"){
                 this.trigger(EventEnum.StopPushSuccess,id);
+            }
+            if(message==="Play"){
+                this.trigger(EventEnum.PlayEnd,id);
             }
         }
     }
@@ -130,6 +207,7 @@ class WsRtc extends EventBus implements ILiveInterface{
                 if(rsp.code === 0) {
                     WSWebRTC.WSChannel.init({});
                     WSWebRTC.WSEmitter.listenTo(Event.SKIN_EVENT,this.skinEventListener.bind(this));
+                    WSWebRTC.WSEmitter.listenTo(Event.PLAYER_EVENT, this.playEventListener.bind(this));
                     resolve(true);
                 }else{
                     reject(false);
@@ -138,7 +216,7 @@ class WsRtc extends EventBus implements ILiveInterface{
         });
     }
     public createChannel(channelConfig:IChannelConfig):Promise<any>{
-        const {bitrate=400,framerate=25,brFactor=0.6,echoCancellation=true,sei=true,cameraId,audioId,profile,isBrControl=true,mix=true} = channelConfig;
+        const {bitrate=400,framerate=25,brFactor=0.6,echoCancellation=true,sei=true,cameraId,audioId,profile,isBrControl=true,mix=true,idle=1800} = channelConfig;
         return new Promise((resole,reject)=>{
             if(this.createChannelEventListener){
                 WSWebRTC.WSEmitter.removeTo(Event.CHANNEL_EVENT,this.createChannelEventListener);
@@ -183,6 +261,7 @@ class WsRtc extends EventBus implements ILiveInterface{
                             }:false
                         },
                         mixConfig: mix?{
+                            idle,
                             sei: sei,
                             layoutIndex: 0,
                             layout: 0,
@@ -303,14 +382,106 @@ class WsRtc extends EventBus implements ILiveInterface{
         })
     }
     
-    public updateMix(){
-        return Promise.resolve(true);
+    public createMix(mixConfig:IMixConfig):Promise<boolean>{
+        return new Promise((resole,reject)=>{
+            const {maxBitrate=3000,sei=1,layoutIndex=0,layout,resolution,fill,framerate=25,peers=[],layoutContent=[],idle=1800} = mixConfig;
+            if(this.createMixEventListener){
+                WSWebRTC.WSEmitter.removeTo(Event.MIX_EVENT,this.createMixEventListener);
+            }
+            this.createMixEventListener=(obj:any)=>{
+                if(!obj) return;
+                const {type,code}=obj;
+                switch(type) {
+                    case MixEvent.CREATE:
+                        WSWebRTC.WSEmitter.removeTo(Event.MIX_EVENT,this.createMixEventListener);
+                        this.createMixEventListener=undefined as any;
+                        if(code !==0) {
+                            reject(false);
+                        }else{
+                            resole(true);
+                        }
+                        break;
+                    default: break;
+                }
+            };
+            WSWebRTC.WSEmitter.listenTo(Event.CHANNEL_EVENT,this.createChannelEventListener);
+            WSWebRTC.WSStream.mixCreate({
+                maxBitrate,
+                sei,
+                layoutIndex,
+                layout,
+                resolution,
+                fill,
+                roomUrl: this.mixPath,
+                framerate,
+                idle,
+                peers:peers.map((peer)=>{
+                    return {
+                        layout_index:peer.layout_index,
+                        name:`${this.host}/${this.appId}_${this.channelId}/${peer.userId}`
+                    }
+                }),
+                layout_content:layoutContent,
+            });
+        });
+    }
+    public updateMix(mixConfig:IMixConfig):Promise<boolean>{
+        return new Promise((resole,reject)=>{
+            const {maxBitrate=3000,sei=1,layoutIndex=0,layout,resolution,fill,framerate=25,peers=[],layoutContent=[],idle=1800} = mixConfig;
+            if(this.updateMixEventListener){
+                WSWebRTC.WSEmitter.removeTo(Event.MIX_EVENT,this.updateMixEventListener);
+            }
+            this.updateMixEventListener=(obj:any)=>{
+                if(!obj) return;
+                const {type,code}=obj;
+                switch(type) {
+                    case MixEvent.MODIFY:
+                        WSWebRTC.WSEmitter.removeTo(Event.MIX_EVENT,this.updateMixEventListener);
+                        this.updateMixEventListener=undefined as any;
+                        if(code !==0) {
+                            reject(false);
+                        }else{
+                            resole(true);
+                        }
+                        break;
+                    default: break;
+                }
+            };
+            WSWebRTC.WSEmitter.listenTo(Event.CHANNEL_EVENT,this.createChannelEventListener);
+            WSWebRTC.WSStream.mixModify({
+                maxBitrate,
+                sei,
+                layoutIndex,
+                layout,
+                resolution,
+                fill,
+                idle,
+                roomUrl: this.mixPath,
+                framerate,
+                peers:peers.map((peer)=>{
+                    return {
+                        layout_index:peer.layout_index,
+                        name:`${this.host}/${this.appId}_${this.channelId}/${peer.userId}`
+                    }
+                }),
+                layout_content:layoutContent,
+            });
+        });
     }
     public shareDesktop():void{
     }
     public stopDesktop():void{
     }
-    public play():void{
+    public play(url:string,secCallback:(timestamp:number)=>void):void{
+        WSWebRTC.WSPlayer.play({
+            "isLiveCatch": true,
+            "url": url,
+            "enableAudioStrategy":true,
+            "seiConfig": {
+                "isSei": true,
+                "seiCallback": secCallback
+            }
+        });
     }
     public playMix():void{
     }
