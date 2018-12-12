@@ -8,6 +8,7 @@
 import {WSWebRTC} from './wswebrtc';
 import {ILiveInterface} from '../interface';
 import {EventBus} from '../EventBus';
+import deleteProperty = Reflect.deleteProperty;
 
 export declare interface IWsRtcConfig{
     host:string;
@@ -62,7 +63,7 @@ declare interface IMixLayout{
     height:number;
 }
 
-export declare interface IMixConfig {
+export declare interface IModifyMixConfig {
     layout:0|1|2|11|22;
     resolution:{width:number;height:number};
     maxBitrate?:number;
@@ -70,9 +71,12 @@ export declare interface IMixConfig {
     sei:0|1;
     fill:0|1|2;
     idle?:number;// 合流销毁
-    peers:IMixPeer[];
     layoutIndex:number;
     layoutContent:IMixLayout[]
+}
+
+export declare interface IMixConfig extends IModifyMixConfig{
+    peers:IMixPeer[];
 }
 
 const SkinEvent=WSWebRTC.WSEvent.SkinEvent;
@@ -404,7 +408,7 @@ class WsRtc extends EventBus implements ILiveInterface{
                     default: break;
                 }
             };
-            WSWebRTC.WSEmitter.listenTo(Event.CHANNEL_EVENT,this.createChannelEventListener);
+            WSWebRTC.WSEmitter.listenTo(Event.CHANNEL_EVENT,this.createMixEventListener);
             WSWebRTC.WSStream.mixCreate({
                 maxBitrate,
                 sei,
@@ -425,9 +429,9 @@ class WsRtc extends EventBus implements ILiveInterface{
             });
         });
     }
-    public updateMix(mixConfig:IMixConfig):Promise<boolean>{
+    public updateMix(mixConfig:IModifyMixConfig):Promise<boolean>{
         return new Promise((resole,reject)=>{
-            const {maxBitrate=3000,sei=1,layoutIndex=0,layout,resolution,fill,framerate=25,peers=[],layoutContent=[],idle=1800} = mixConfig;
+            const {maxBitrate=3000,sei=1,layoutIndex=0,layout,resolution,fill,framerate=25,layoutContent=[],idle=1800} = mixConfig;
             if(this.updateMixEventListener){
                 WSWebRTC.WSEmitter.removeTo(Event.MIX_EVENT,this.updateMixEventListener);
             }
@@ -447,7 +451,7 @@ class WsRtc extends EventBus implements ILiveInterface{
                     default: break;
                 }
             };
-            WSWebRTC.WSEmitter.listenTo(Event.CHANNEL_EVENT,this.createChannelEventListener);
+            WSWebRTC.WSEmitter.listenTo(Event.CHANNEL_EVENT,this.updateMixEventListener);
             WSWebRTC.WSStream.mixModify({
                 maxBitrate,
                 sei,
@@ -458,12 +462,6 @@ class WsRtc extends EventBus implements ILiveInterface{
                 idle,
                 roomUrl: this.mixPath,
                 framerate,
-                peers:peers.map((peer)=>{
-                    return {
-                        layout_index:peer.layout_index,
-                        name:`${this.host}/${this.appId}_${this.channelId}/${peer.userId}`
-                    }
-                }),
                 layout_content:layoutContent,
             });
         });

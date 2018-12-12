@@ -1,4 +1,9 @@
-import {IChannelConfig, IMixConfig, IWsRtcConfig} from './wsrtc';
+import {
+    IChannelConfig,
+    IMixConfig,
+    IModifyMixConfig,
+    IWsRtcConfig,
+} from './wsrtc';
 
 interface ILiveInterface {
     init(config:IWsRtcConfig):void;
@@ -9,7 +14,7 @@ interface ILiveInterface {
     leaveChannel():Promise<boolean>;
     startMix():Promise<boolean>;
     createMix(mixConfig:IMixConfig):Promise<boolean>;
-    updateMix(mixConfig:IMixConfig):Promise<boolean>;
+    updateMix(mixConfig:IModifyMixConfig):Promise<boolean>;
     stopMix():Promise<boolean>;
     shareDesktop():void;
     stopDesktop():void;

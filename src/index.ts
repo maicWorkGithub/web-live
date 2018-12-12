@@ -1,5 +1,11 @@
 import {ILiveInterface} from './interface';
-import {IChannelConfig, IWsRtcConfig, WsRtc} from './wsrtc';
+import {
+    IChannelConfig,
+    IMixConfig,
+    IModifyMixConfig,
+    IWsRtcConfig,
+    WsRtc,
+} from './wsrtc';
 import {EventBus} from './EventBus';
 
 // @ts-ignore
@@ -41,8 +47,11 @@ class WebLive extends EventBus implements ILiveInterface{
     startMix():Promise<boolean>{
         return WsRtcInstance.startMix();
     }
-    updateMix():Promise<boolean>{
-        return WsRtcInstance.updateMix();
+    updateMix(mixConfig:IModifyMixConfig):Promise<boolean>{
+        return WsRtcInstance.updateMix(mixConfig);
+    }
+    createMix(mixConfig: IMixConfig): Promise<boolean> {
+        return WsRtcInstance.createMix(mixConfig);
     }
     stopMix():Promise<boolean>{
         return WsRtcInstance.stopMix();
