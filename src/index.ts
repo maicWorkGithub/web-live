@@ -74,6 +74,9 @@ class WebLive extends EventBus implements ILiveInterface{
     public off(event:string,callback:any){
         return WsRtcInstance.off(event,callback);
     }
+    public destroy(){
+        return WsRtcInstance.destroy();
+    }
 }
 
 

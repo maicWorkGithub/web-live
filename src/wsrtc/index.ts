@@ -8,7 +8,6 @@
 import {WSWebRTC} from './wswebrtc';
 import {ILiveInterface} from '../interface';
 import {EventBus} from '../EventBus';
-import deleteProperty = Reflect.deleteProperty;
 
 export declare interface IWsRtcConfig{
     host:string;
@@ -24,18 +23,18 @@ export declare interface IWsRtcConfig{
 }
 
 export enum ProfileEnum {
-    "180P_1",
-    "180P_2",
-    "360P_1",
-    "360P_2",
-    "480P_1",
-    "480P_2",
-    "540P_1",
-    "540P_2",
-    "720P_1",
-    "720P_2",
-    "1080P_1",
-    "1080P_2"
+    "180P_1"="180P_1",
+    "180P_2"="180P_2",
+    "360P_1"="360P_1",
+    "360P_2"="360P_2",
+    "480P_1"="480P_1",
+    "480P_2"="480P_2",
+    "540P_1"="540P_1",
+    "540P_2"="540P_2",
+    "720P_1"="720P_1",
+    "720P_2"="720P_2",
+    "1080P_1"="1080P_1",
+    "1080P_2"="1080P_2"
 }
 
 export declare interface IChannelConfig {
@@ -50,6 +49,7 @@ export declare interface IChannelConfig {
     isBrControl?:boolean;
     mix?:boolean;
     idle?:number;
+    layoutContent?:IMixLayout[]
 }
 
 declare interface IMixPeer{
@@ -116,6 +116,12 @@ class WsRtc extends EventBus implements ILiveInterface{
     private joinChannelEventListener:(obj:any)=>void;
     private createMixEventListener:(obj:any)=>void;
     private updateMixEventListener:(obj:any)=>void;
+    private defaultLayoutContent=[{
+        x:0,
+        y:0,
+        width:1,
+        height:1
+    }];
     constructor(){
         super();
     }
@@ -140,7 +146,6 @@ class WsRtc extends EventBus implements ILiveInterface{
             case PlayEvent.DURATION_WARNING://警告
                 break;
             case PlayEvent.RESOLUTION_CHANGE://分辨率改变
-            
                 if(!data.isHeader) {
                     const resolution=data.aspect2.split("x");
                     this.trigger(EventEnum.PlayResolutionChange,{
@@ -220,7 +225,7 @@ class WsRtc extends EventBus implements ILiveInterface{
         });
     }
     public createChannel(channelConfig:IChannelConfig):Promise<any>{
-        const {bitrate=400,framerate=25,brFactor=0.6,echoCancellation=true,sei=true,cameraId,audioId,profile,isBrControl=true,mix=true,idle=1800} = channelConfig;
+        const {bitrate=400,framerate=25,brFactor=0.6,echoCancellation=true,sei=true,cameraId,audioId,profile,isBrControl=true,mix=true,idle=1800,layoutContent=this.defaultLayoutContent} = channelConfig;
         return new Promise((resole,reject)=>{
             if(this.createChannelEventListener){
                 WSWebRTC.WSEmitter.removeTo(Event.CHANNEL_EVENT,this.createChannelEventListener);
@@ -276,12 +281,7 @@ class WsRtc extends EventBus implements ILiveInterface{
                             fill: 0,
                             roomUrl: this.mixPath,
                             framerate: framerate,
-                            layout_content:[{
-                                x:0,
-                                y:0,
-                                width:1,
-                                height:1
-                            }]
+                            layout_content:layoutContent
                         }:undefined
                     },
                 }
@@ -482,6 +482,13 @@ class WsRtc extends EventBus implements ILiveInterface{
         });
     }
     public playMix():void{
+    }
+    public destroy():void{
+        WSWebRTC.WSDestroy.destroy();
+        WSWebRTC.WSChannel.destory();
+        WSWebRTC.WSEmitter.removeToAll();
+        WSWebRTC.WSPlayer.destroy();
+        WSWebRTC.WSStream.destory();
     }
 }
 
