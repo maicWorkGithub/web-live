@@ -487,8 +487,8 @@ class WsRtc extends EventBus implements ILiveInterface{
         WSWebRTC.WSDestroy.destroy();
         WSWebRTC.WSChannel.destory&&WSWebRTC.WSChannel.destory();
         WSWebRTC.WSEmitter.removeToAll();
-        WSWebRTC.WSPlayer.destroy();
-        WSWebRTC.WSStream.destory();
+        WSWebRTC.WSPlayer.destroy&&WSWebRTC.WSPlayer.destroy();
+        WSWebRTC.WSStream.destory&&WSWebRTC.WSStream.destory();
     }
 }
 
