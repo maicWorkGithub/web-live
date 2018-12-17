@@ -49,7 +49,8 @@ export declare interface IChannelConfig {
     isBrControl?:boolean;
     mix?:boolean;
     idle?:number;
-    layoutContent?:IMixLayout[]
+    layoutContent?:IMixLayout[];
+    resolution?:{width:number;height:number};
 }
 
 declare interface IMixPeer{
@@ -225,7 +226,7 @@ class WsRtc extends EventBus implements ILiveInterface{
         });
     }
     public createChannel(channelConfig:IChannelConfig):Promise<any>{
-        const {bitrate=400,framerate=25,brFactor=0.6,echoCancellation=true,sei=true,cameraId,audioId,profile,isBrControl=true,mix=true,idle=1800,layoutContent=this.defaultLayoutContent} = channelConfig;
+        const {bitrate=400,framerate=25,brFactor=0.6,echoCancellation=true,sei=true,cameraId,audioId,profile,isBrControl=true,mix=true,idle=1800,layoutContent=this.defaultLayoutContent,resolution={width:this.width,height:this.height}} = channelConfig;
         return new Promise((resole,reject)=>{
             if(this.createChannelEventListener){
                 WSWebRTC.WSEmitter.removeTo(Event.CHANNEL_EVENT,this.createChannelEventListener);
@@ -274,10 +275,7 @@ class WsRtc extends EventBus implements ILiveInterface{
                             sei: sei,
                             layoutIndex: 0,
                             layout: 0,
-                            resolution: {
-                                width:this.width,
-                                height:this.height
-                            },
+                            resolution,
                             fill: 0,
                             roomUrl: this.mixPath,
                             framerate: framerate,
