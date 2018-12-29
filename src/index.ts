@@ -65,6 +65,9 @@ class WebLive extends EventBus implements ILiveInterface{
     play(url:string,seiCallback:(timestamp:number)=>void):void{
         return WsRtcInstance.play(url,seiCallback);
     }
+    stopPlay(): void {
+        return WsRtcInstance.stopPlay();
+    }
     playMix():void{
         return WsRtcInstance.playMix();
     }

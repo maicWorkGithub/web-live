@@ -19,6 +19,7 @@ interface ILiveInterface {
     shareDesktop():void;
     stopDesktop():void;
     play(url:string,secCallback:(timestamp:number)=>void):void;
+    stopPlay():void;
     playMix():void;
     destroy():void;
 }

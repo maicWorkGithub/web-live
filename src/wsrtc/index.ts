@@ -479,6 +479,9 @@ class WsRtc extends EventBus implements ILiveInterface{
             }
         });
     }
+    public stopPlay(){
+        WSWebRTC.WSPlayer.destroy&&WSWebRTC.WSPlayer.destroy();
+    }
     public playMix():void{
     }
     public destroy():void{
