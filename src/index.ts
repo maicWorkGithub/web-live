@@ -1,5 +1,6 @@
 import {ILiveInterface} from './interface';
 import {
+    EventEnum,
     IChannelConfig,
     IMixConfig,
     IModifyMixConfig,
@@ -62,11 +63,8 @@ class WebLive extends EventBus implements ILiveInterface{
     stopDesktop():void{
         return WsRtcInstance.stopDesktop();
     }
-    play(url:string,seiCallback:(timestamp:number)=>void):void{
-        return WsRtcInstance.play(url,seiCallback);
-    }
-    stopPlay(): void {
-        return WsRtcInstance.stopPlay();
+    play(url:string,seiCallback?:(timestamp:number)=>void,urlCallback?:(callback:Function)=>void,listener?:(eventType:EventEnum,data?:any)=>void){
+        return WsRtcInstance.play(url,seiCallback,urlCallback,listener);
     }
     playMix():void{
         return WsRtcInstance.playMix();

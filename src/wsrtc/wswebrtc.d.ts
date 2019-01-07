@@ -1,5 +1,10 @@
 import {ProfileEnum} from './index';
 
+declare interface IReportConfig{
+    enable:boolean;
+    period?:number;
+}
+
 declare interface WSInitInitParams{
     host:string;
     appId:string;
@@ -7,7 +12,8 @@ declare interface WSInitInitParams{
     userId:string;
     userRole:0|1;
     sdkType?:"MIC_LINK"|"STREAMER_SDK",
-    logConfig?:any;
+    isRtcArea?:boolean;
+    reportConfig?:IReportConfig
 }
 
 declare interface WSInitInitResult{
@@ -44,7 +50,12 @@ declare class WSEmitter {
 
 declare interface WSPlayerSEIConfig{
     isSei:boolean;
-    seiCallback:(obj:Object)=>void
+    seiCallback?:(obj:Object)=>void
+}
+
+declare interface ISecretConfig {
+    isSecret: boolean;
+    urlCallback?: (callback:Function)=>void;
 }
 
 declare interface WSPlayerPlayParams{
@@ -52,7 +63,13 @@ declare interface WSPlayerPlayParams{
     userId?:string;
     isLiveCatch?:boolean;
     enableAudioStrategy?:boolean;
+    secretConfig?:ISecretConfig;
     seiConfig:WSPlayerSEIConfig
+}
+
+
+export declare interface IExtraPlayer extends WSPlayer , WSEmitter{
+    stop:()=>void;
 }
 /**
  * 播放合流模块
@@ -60,6 +77,7 @@ declare interface WSPlayerPlayParams{
 declare class WSPlayer {
     play(params:WSPlayerPlayParams): void;
     destroy():void;
+    play2:()=>IExtraPlayer
 }
 
 
@@ -123,7 +141,8 @@ declare interface MixConfig{
     layoutIndex?:number;
     layout_content?:LayoutConfig[];
     roomUrl:string;
-    peers?:Peer[]
+    peers?:Peer[];
+    audioChannel?:1|2;
 }
 
 declare interface WSStreamPushParams{
@@ -182,14 +201,42 @@ export class WSStream {
     destory():void;
 }
 
+declare interface INetworkConfig{
+    isDetect?:boolean;
+    enforceTCP?:boolean;
+}
 
+declare interface IWatermark{
+    url:string;
+    x:number;
+    y:number;
+    width:number;
+    height:number;
+}
 
+declare interface IWatermarkConfig{
+    enable:boolean;
+    config:IWatermark[]
+}
+
+declare interface IMixAudioConfig{
+    enable:boolean;
+    isLoop?:boolean;
+}
 
 declare interface StreamConfig{
     isMix:boolean;
+    isMixCheck?:boolean;
+    isSei?:boolean;
+    isMirror?:boolean;
+    isTrackDetect?:boolean;
+    enableCustom?:boolean;
+    videoType?:"VP8"|"H264";
     camConfig:CamConfig;
     mixConfig?:MixConfig;
-    isSei?:boolean;
+    networkConfig?:INetworkConfig;
+    watermarkConfig?:IWatermarkConfig;
+    mixAudioConfig?:IMixAudioConfig;
 }
 declare interface WSChannelCreateConfig{
     streamConfig:StreamConfig

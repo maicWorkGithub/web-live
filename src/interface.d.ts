@@ -1,8 +1,9 @@
 import {
+    EventEnum,
     IChannelConfig,
     IMixConfig,
     IModifyMixConfig,
-    IWsRtcConfig,
+    IWsRtcConfig, Player,
 } from './wsrtc';
 
 interface ILiveInterface {
@@ -18,8 +19,7 @@ interface ILiveInterface {
     stopMix():Promise<boolean>;
     shareDesktop():void;
     stopDesktop():void;
-    play(url:string,secCallback:(timestamp:number)=>void):void;
-    stopPlay():void;
+    play(url:string,seiCallback?:(timestamp:number)=>void,urlCallback?:(callback:Function)=>void,listener?:(eventType:EventEnum,data?:any)=>void):Player;
     playMix():void;
     destroy():void;
 }

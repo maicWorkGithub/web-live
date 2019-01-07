@@ -5,7 +5,7 @@
  * @Last Modified time: 2018/12/7 12:14
  * @disc:网宿连麦 sdk
  */
-import {WSWebRTC} from './wswebrtc';
+import {IExtraPlayer, WSWebRTC} from './wswebrtc';
 import {ILiveInterface} from '../interface';
 import {EventBus} from '../EventBus';
 
@@ -100,13 +100,85 @@ export enum EventEnum {
     PlayResolutionChange="play:resolution",
 }
 
+const PlayerMap:Map<number,Player>=new Map();
+
+
+export class Player {
+    private player:IExtraPlayer;
+    public id:number=Date.now();
+    constructor(listener?:(eventType:EventEnum,data?:any)=>void){
+        this.player=WSWebRTC.WSPlayer.play2();
+        if(listener){
+            this.player.listenTo(Event.PLAYER_EVENT,(obj:any)=>{
+                if(!obj) return;
+                const {type,data}=obj;
+                switch (type){
+                    case PlayEvent.ERROR://异常
+                        listener(EventEnum.PlayError);
+                        break;
+                    case PlayEvent.METADATA://视屏元数据信息
+                        listener(EventEnum.PlayMetadata,{
+                            width:data.width,
+                            height:data.height
+                        });
+                        break;
+                    case PlayEvent.SOCKET_OPEN://接收数据
+                        break;
+                    case PlayEvent.SOCKET_CLOSE://异常中断
+                        listener(EventEnum.PlayInterrupt);
+                        break;
+                    case PlayEvent.DURATION_WARNING://警告
+                        break;
+                    case PlayEvent.RESOLUTION_CHANGE://分辨率改变
+                        if(!data.isHeader) {
+                            const resolution=data.aspect2.split("x");
+                            listener(EventEnum.PlayResolutionChange,{
+                                width:resolution[0],
+                                height:resolution[1]
+                            });
+                        } else {
+                            listener(EventEnum.PlayResolutionChange,{
+                                width:data.aspect1,
+                                height:data.aspect2
+                            });
+                        }
+                        break;
+                }
+            });
+        }
+        PlayerMap.set(this.id,this);
+    }
+    public play(url:string,seiCallback?:(timestamp:number)=>void,urlCallback?:(callback:Function)=>void){
+        this.player.play({
+            isLiveCatch: true,
+            url: url,
+            seiConfig: {
+                isSei: !!seiCallback,
+                seiCallback: seiCallback
+            },
+            enableAudioStrategy: true,
+            secretConfig:{
+                isSecret:!!urlCallback,
+                urlCallback:urlCallback
+            }
+        })
+    }
+    public destroy(){
+        this.player.removeToAll();
+        this.player.stop();
+        this.player=undefined as any;
+        PlayerMap.delete(this.id);
+    }
+}
+
+
 
 class WsRtc extends EventBus implements ILiveInterface{
     private host:string;
     private appId:string;
     private appKey:string;
     private mixPath:string;
-    private pullMixPath:string;
+    // private pullMixPath:string;
     private userId:string;
     private channelId:string;
     private  userRole:0|1;
@@ -125,42 +197,6 @@ class WsRtc extends EventBus implements ILiveInterface{
     }];
     constructor(){
         super();
-    }
-    private playEventListener(obj:any){
-        if(!obj) return;
-        const {type,data}=obj;
-        switch (type){
-            case PlayEvent.ERROR://异常
-                this.trigger(EventEnum.PlayError);
-                break;
-            case PlayEvent.METADATA://视屏元数据信息
-                this.trigger(EventEnum.PlayMetadata,{
-                    width:data.width,
-                    height:data.height
-                });
-                break;
-            case PlayEvent.SOCKET_OPEN://接收数据
-                break;
-            case PlayEvent.SOCKET_CLOSE://异常中断
-                this.trigger(EventEnum.PlayInterrupt);
-                break;
-            case PlayEvent.DURATION_WARNING://警告
-                break;
-            case PlayEvent.RESOLUTION_CHANGE://分辨率改变
-                if(!data.isHeader) {
-                    const resolution=data.aspect2.split("x");
-                    this.trigger(EventEnum.PlayResolutionChange,{
-                        width:resolution[0],
-                        height:resolution[1]
-                    });
-                } else {
-                    this.trigger(EventEnum.PlayResolutionChange,{
-                        width:data.aspect1,
-                        height:data.aspect2
-                    });
-                }
-                break;
-        }
     }
     private skinEventListener(obj:any){
         if(!obj) return;
@@ -194,7 +230,7 @@ class WsRtc extends EventBus implements ILiveInterface{
         this.appId=config.appId;
         this.appKey=config.appKey;
         this.mixPath=config.mixPath;
-        this.pullMixPath=config.pullMixPath;
+        // this.pullMixPath=config.pullMixPath;
         this.userId=config.userId;
         this.channelId=config.channelId + "";
         this.userRole=config.userRole;
@@ -210,14 +246,12 @@ class WsRtc extends EventBus implements ILiveInterface{
                 userId:this.userId,
                 userRole:this.userRole,
                 sdkType:"MIC_LINK",
-                logConfig:{
-                    "level": 1
-                }
+                isRtcArea:false,// 海外是否开启
+                reportConfig:{enable:true,period:60},
             }, (rsp) => {
                 if(rsp.code === 0) {
                     WSWebRTC.WSChannel.init({});
                     WSWebRTC.WSEmitter.listenTo(Event.SKIN_EVENT,this.skinEventListener.bind(this));
-                    WSWebRTC.WSEmitter.listenTo(Event.PLAYER_EVENT, this.playEventListener.bind(this));
                     resolve(true);
                 }else{
                     reject(false);
@@ -254,7 +288,11 @@ class WsRtc extends EventBus implements ILiveInterface{
                 {
                     streamConfig: {
                         isMix: mix,
+                        isMixCheck:true,
                         isSei: sei,
+                        isMirror:false,
+                        isTrackDetect:true,
+                        videoType:"H264",
                         camConfig: {
                             video:cameraId?{
                                 profile:profile,
@@ -280,7 +318,8 @@ class WsRtc extends EventBus implements ILiveInterface{
                             roomUrl: this.mixPath,
                             framerate: framerate,
                             layout_content:layoutContent
-                        }:undefined
+                        }:undefined,
+                        networkConfig:{isDetect:true,enforceTCP:false},
                     },
                 }
             );
@@ -341,6 +380,9 @@ class WsRtc extends EventBus implements ILiveInterface{
                     isDirectLink:true,
                     streamConfig:{
                         isMix:true,
+                        isMirror:false,
+                        isTrackDetect:true,
+                        videoType:"H264",
                         camConfig:{
                             video:cameraId?{
                                 profile:profile,
@@ -356,6 +398,7 @@ class WsRtc extends EventBus implements ILiveInterface{
                                 echoCancellation:echoCancellation
                             }:false,
                         },
+                        networkConfig:{isDetect:true,enforceTCP:false},
                     },
                 }
             );
@@ -417,6 +460,7 @@ class WsRtc extends EventBus implements ILiveInterface{
                 roomUrl: this.mixPath,
                 framerate,
                 idle,
+                audioChannel:2,
                 peers:peers.map((peer)=>{
                     return {
                         layout_index:peer.layout_index,
@@ -468,28 +512,18 @@ class WsRtc extends EventBus implements ILiveInterface{
     }
     public stopDesktop():void{
     }
-    public play(url:string,secCallback:(timestamp:number)=>void):void{
-        WSWebRTC.WSPlayer.play({
-            "isLiveCatch": true,
-            "url": url,
-            "enableAudioStrategy":true,
-            "seiConfig": {
-                "isSei": true,
-                "seiCallback": secCallback
-            }
-        });
-    }
-    public stopPlay(){
-        WSWebRTC.WSPlayer.destroy&&WSWebRTC.WSPlayer.destroy();
+    public play(url:string,seiCallback?:(timestamp:number)=>void,urlCallback?:(callback:Function)=>void,listener?:(eventType:EventEnum,data?:any)=>void){
+        const player = new Player(listener);
+        player.play(url,seiCallback,urlCallback);
+        return player;
     }
     public playMix():void{
     }
     public destroy():void{
         WSWebRTC.WSDestroy.destroy();
-        WSWebRTC.WSChannel.destory&&WSWebRTC.WSChannel.destory();
-        WSWebRTC.WSEmitter.removeToAll();
-        WSWebRTC.WSPlayer.destroy&&WSWebRTC.WSPlayer.destroy();
-        WSWebRTC.WSStream.destory&&WSWebRTC.WSStream.destory();
+        PlayerMap.forEach((player)=>{
+            player.destroy();
+        })
     }
 }
 
