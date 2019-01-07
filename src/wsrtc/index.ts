@@ -145,6 +145,21 @@ export class Player {
                         break;
                 }
             });
+            this.player.listenTo(Event.SKIN_EVENT,(obj:any)=>{
+                if(!obj) return;
+                const {type,message}=obj;
+                if(type === SkinEvent.APPEND) {
+                    const wrap:any=obj.data;
+                    if(message==="Play"){
+                        listener(EventEnum.PlaySuccess,wrap);
+                    }
+                } else if(type === SkinEvent.REMOVE) {
+                    const id=obj.data;
+                    if(message==="Play"){
+                        listener(EventEnum.PlayEnd,id);
+                    }
+                }
+            })
         }
         PlayerMap.set(this.id,this);
     }
