@@ -185,11 +185,7 @@ declare interface WSStreamMixDestoryParams{
     roomId:string;
 }
 
-export class WSStream {
-    startPreview(params: WSStreamPreviewParams): void;
-    stopPreview():void;
-    startPush(params: WSStreamPushParams):void;
-    stopPush():void;
+export class WSMixer {
     startMix(params: WSStreamMixParams):void;
     stopMix():void;
     mixCreate(params: WSStreamMixConfig):void;
@@ -198,6 +194,12 @@ export class WSStream {
     mixQuit(params:WSStreamMixJoinParams):void;
     mixStatus(params:WSStreamMixStateParams):void;
     mixDestory(params:WSStreamMixDestoryParams):void;
+}
+export class WSStream {
+    startPreview(params: WSStreamPreviewParams): void;
+    stopPreview():void;
+    startPush(params: WSStreamPushParams):void;
+    stopPush():void;
     destory():void;
 }
 
@@ -291,6 +293,7 @@ declare class WSWebRTC{
     public static WSPlayer:WSPlayer;
     public static WSStream:WSStream;
     public static WSChannel:WSChannel;
+    public static WSMixer:WSMixer;
     public static WSUtil:WSUtil;
     public static WSEvent:WSEvent;
 }

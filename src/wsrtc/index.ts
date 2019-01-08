@@ -427,14 +427,14 @@ class WsRtc extends EventBus implements ILiveInterface{
     }
     public stopMix(): Promise<boolean> {
         return new Promise<boolean>((resole,reject)=>{
-            WSWebRTC.WSStream.stopMix();
+            WSWebRTC.WSMixer.stopMix();
             resole(true);
         })
     }
     
     public startMix():Promise<boolean>{
         return new Promise<boolean>((resole,reject)=>{
-            WSWebRTC.WSStream.startMix({
+            WSWebRTC.WSMixer.startMix({
                 roomId:this.channelId,
                 userId:this.userId
             });
@@ -465,7 +465,7 @@ class WsRtc extends EventBus implements ILiveInterface{
                 }
             };
             WSWebRTC.WSEmitter.listenTo(Event.CHANNEL_EVENT,this.createMixEventListener);
-            WSWebRTC.WSStream.mixCreate({
+            WSWebRTC.WSMixer.mixCreate({
                 maxBitrate,
                 sei,
                 layoutIndex,
@@ -509,7 +509,7 @@ class WsRtc extends EventBus implements ILiveInterface{
                 }
             };
             WSWebRTC.WSEmitter.listenTo(Event.CHANNEL_EVENT,this.updateMixEventListener);
-            WSWebRTC.WSStream.mixModify({
+            WSWebRTC.WSMixer.mixModify({
                 maxBitrate,
                 sei,
                 layoutIndex,

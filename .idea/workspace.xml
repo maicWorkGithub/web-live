@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="770b1a9c-eb53-4e8f-b166-299ca540b60d" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/wsrtc/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/wsrtc/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/wsrtc/wswebrtc.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/wsrtc/wswebrtc.d.ts" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -19,8 +21,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/wsrtc/wswebrtc.d.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="324">
-              <caret line="70" column="37" selection-start-line="70" selection-start-column="25" selection-end-line="70" selection-end-column="37" />
+            <state relative-caret-position="594">
+              <caret line="295" column="25" selection-start-line="295" selection-start-column="18" selection-end-line="295" selection-end-column="25" />
             </state>
           </provider>
         </entry>
@@ -28,7 +30,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/index.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="627">
+            <state relative-caret-position="1311">
               <caret line="69" column="39" selection-start-line="69" selection-start-column="39" selection-end-line="69" selection-end-column="39" />
               <folding>
                 <element signature="e#0#43#0" expanded="true" />
@@ -40,11 +42,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/interface.d.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="456">
+            <state relative-caret-position="342">
               <caret line="24" column="1" selection-start-line="24" selection-start-column="1" selection-end-line="24" selection-end-column="1" />
-              <folding>
-                <element signature="e#0#102#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -52,8 +51,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/package.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="57">
-              <caret line="3" column="20" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
+            <state relative-caret-position="38">
+              <caret line="2" column="21" selection-start-line="2" selection-start-column="21" selection-end-line="2" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -88,8 +87,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/wsrtc/index.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="556">
-              <caret line="162" column="9" lean-forward="true" selection-start-line="162" selection-start-column="9" selection-end-line="162" selection-end-column="9" />
+            <state relative-caret-position="-988">
+              <caret line="11" column="38" lean-forward="true" selection-start-line="11" selection-start-column="38" selection-end-line="11" selection-end-column="38" />
               <folding>
                 <element signature="e#192#242#0" expanded="true" />
                 <element signature="n#!!block;n#play#0;n#Player#0" />
@@ -102,7 +101,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/wsrtc/wsrtc.min.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="826">
+            <state relative-caret-position="7505">
               <caret column="395555" selection-start-column="395546" selection-end-column="395555" />
             </state>
           </provider>
@@ -130,7 +129,6 @@
       <find>CHANNEL_EVENT</find>
       <find>LinkE</find>
       <find>quit</find>
-      <find>startMix</find>
       <find>WSStream</find>
       <find>MIX_EVENT</find>
       <find>CREATE</find>
@@ -154,6 +152,7 @@
       <find>playExtraEventListener</find>
       <find>PlaySuccess</find>
       <find>skinEventListener</find>
+      <find>startMix</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -165,9 +164,9 @@
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/src/wsrtc/wswebrtc.js" />
         <option value="$PROJECT_DIR$/src/agora/index.ts" />
-        <option value="$PROJECT_DIR$/src/wsrtc/wswebrtc.d.ts" />
         <option value="$PROJECT_DIR$/src/interface.d.ts" />
         <option value="$PROJECT_DIR$/src/index.ts" />
+        <option value="$PROJECT_DIR$/src/wsrtc/wswebrtc.d.ts" />
         <option value="$PROJECT_DIR$/src/wsrtc/index.ts" />
         <option value="$PROJECT_DIR$/package.json" />
       </list>
@@ -268,18 +267,19 @@
       <workItem from="1545358505402" duration="5000" />
       <workItem from="1545704293479" duration="1126000" />
       <workItem from="1546054414145" duration="371000" />
-      <workItem from="1546842979489" duration="5435000" />
+      <workItem from="1546842979489" duration="5485000" />
+      <workItem from="1546940097901" duration="1153000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="54365000" />
+    <option name="totallyTimeSpent" value="55568000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1918" height="1048" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.31216362" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.31539288" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -293,8 +293,8 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Code Review" order="9" />
       <window_info anchor="bottom" id="TypeScript" order="10" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.5229759" />
-      <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" />
+      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.4994618" weight="0.5224044" />
+      <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.50053823" side_tool="true" weight="0.5229759" />
       <window_info anchor="bottom" id="Compute Code Lines" order="13" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -338,6 +338,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/index.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1311">
+          <caret line="69" column="39" selection-start-line="69" selection-start-column="39" selection-end-line="69" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/interface.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="24" column="1" selection-start-line="24" selection-start-column="1" selection-end-line="24" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="399">
@@ -361,7 +378,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/wsrtc/wsrtc.min.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="826">
+        <state relative-caret-position="7505">
           <caret column="395555" selection-start-column="395546" selection-end-column="395555" />
         </state>
       </provider>
@@ -369,37 +386,17 @@
     <entry file="file://$PROJECT_DIR$/src/adapter.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/interface.d.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="456">
-          <caret line="24" column="1" selection-start-line="24" selection-start-column="1" selection-end-line="24" selection-end-column="1" />
-          <folding>
-            <element signature="e#0#102#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/wsrtc/wswebrtc.d.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="70" column="37" selection-start-line="70" selection-start-column="25" selection-end-line="70" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/index.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="627">
-          <caret line="69" column="39" selection-start-line="69" selection-start-column="39" selection-end-line="69" selection-end-column="39" />
-          <folding>
-            <element signature="e#0#43#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="594">
+          <caret line="295" column="25" selection-start-line="295" selection-start-column="18" selection-end-line="295" selection-end-column="25" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/wsrtc/index.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="556">
-          <caret line="162" column="9" lean-forward="true" selection-start-line="162" selection-start-column="9" selection-end-line="162" selection-end-column="9" />
+        <state relative-caret-position="-988">
+          <caret line="11" column="38" lean-forward="true" selection-start-line="11" selection-start-column="38" selection-end-line="11" selection-end-column="38" />
           <folding>
             <element signature="e#192#242#0" expanded="true" />
             <element signature="n#!!block;n#play#0;n#Player#0" />
@@ -410,8 +407,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="3" column="20" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
+        <state relative-caret-position="38">
+          <caret line="2" column="21" selection-start-line="2" selection-start-column="21" selection-end-line="2" selection-end-column="21" />
         </state>
       </provider>
     </entry>
