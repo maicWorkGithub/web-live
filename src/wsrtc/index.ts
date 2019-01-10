@@ -145,7 +145,7 @@ export class Player {
                         break;
                 }
             });
-            this.player.listenTo(Event.SKIN_EVENT,(obj:any)=>{
+            WSWebRTC.WSEmitter.listenTo(Event.SKIN_EVENT, (obj:any) => {
                 if(!obj) return;
                 const {type,message}=obj;
                 if(type === SkinEvent.APPEND) {
@@ -159,7 +159,7 @@ export class Player {
                         listener(EventEnum.PlayEnd,id);
                     }
                 }
-            })
+            });
         }
         PlayerMap.set(this.id,this);
     }
