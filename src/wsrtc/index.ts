@@ -85,6 +85,7 @@ const Event=WSWebRTC.WSEvent.Event;
 const LinkEvent = WSWebRTC.WSEvent.LinkEvent;
 const MixEvent = WSWebRTC.WSEvent.MixEvent;
 const PlayEvent=WSWebRTC.WSEvent.PlayEvent;
+const PushEvent=WSWebRTC.WSEvent.PushStreamEvent;
 
 
 export enum EventEnum {
@@ -240,6 +241,45 @@ class WsRtc extends EventBus implements ILiveInterface{
             }
         }
     }
+    private channelEventListener(obj:any){
+        if(!obj) return;
+        let {type,data} = obj;
+        switch (type) {
+            // channel
+            case LinkEvent.BROADCAST:
+                break;
+            case LinkEvent.CREATE:
+                break;
+            case LinkEvent.DESTROY:
+                break;
+            // pull
+            case LinkEvent.PULL_EVENT:
+                break;
+            // push
+            case LinkEvent.PUSH_EVENT: {
+                if(data && data.type) {
+                    if(data.type === PushEvent.SERVER_SUCCESS) {
+                        this.startMix();
+                        if(data.currentHost) WSWebRTC.WSMixer.mixHost(data.currentHost);
+                    } else if(data.type === PushEvent.PEER_CONN_SWITCH_EVENT) {
+                        console.warn("network abnormal");
+                    }
+                }
+            } break;
+            // mix
+            case LinkEvent.MIX_EVENT:
+                break;
+            // vchannel
+            case LinkEvent.JOIN_V:
+            case LinkEvent.CREATE_V:
+                break;
+            // layout
+            case LinkEvent.MIX_LAYOUT:
+                console.log("合流布局修改");
+                break;
+            default: break;
+        }
+    }
     public init(config:IWsRtcConfig): void {
         this.host=config.host;
         this.appId=config.appId;
@@ -267,6 +307,9 @@ class WsRtc extends EventBus implements ILiveInterface{
                 if(rsp.code === 0) {
                     WSWebRTC.WSChannel.init({});
                     WSWebRTC.WSEmitter.listenTo(Event.SKIN_EVENT,this.skinEventListener.bind(this));
+                    if(this.userRole===0){
+                        WSWebRTC.WSEmitter.listenTo(Event.CHANNEL_EVENT, this.channelEventListener.bind(this));
+                    }
                     resolve(true);
                 }else{
                     reject(false);

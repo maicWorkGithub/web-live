@@ -194,6 +194,7 @@ export class WSMixer {
     mixQuit(params:WSStreamMixJoinParams):void;
     mixStatus(params:WSStreamMixStateParams):void;
     mixDestory(params:WSStreamMixDestoryParams):void;
+    mixHost(host:string):void;
 }
 export class WSStream {
     startPreview(params: WSStreamPreviewParams): void;
@@ -281,6 +282,8 @@ declare class WSEvent{
     LinkEvent:any;
     SignalEvent:any;
     MixEvent:any;
+    PushStreamEvent:any;
+    PullStreamEvent:any;
 }
 
 
