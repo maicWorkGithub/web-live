@@ -159,12 +159,18 @@ export class Player {
         if(type === SkinEvent.APPEND) {
             const wrap:any=obj.data;
             if(message==="Play"){
-                this.listener&&this.listener(EventEnum.PlaySuccess,wrap);
+                const video = wrap.querySelector("video");
+                const videoId = video.getAttribute("id");
+                if(new RegExp("^"+this.id).test(videoId)){
+                    this.listener&&this.listener(EventEnum.PlaySuccess,wrap);
+                }
             }
         } else if(type === SkinEvent.REMOVE) {
             const id=obj.data;
             if(message==="Play"){
-                this.listener&&this.listener(EventEnum.PlayEnd,id);
+                if(new RegExp("^"+this.id).test(id)){
+                    this.listener&&this.listener(EventEnum.PlayEnd,id);
+                }
             }
         }
     }
