@@ -101,14 +101,17 @@ export enum EventEnum {
     PlayResolutionChange="play:resolution",
 }
 
-const PlayerMap:Map<number,Player>=new Map();
+const PlayerMap:Map<string,Player>=new Map();
 
 
 export class Player {
     private player:IExtraPlayer;
-    public id:number=Date.now();
+    public id:string=Date.now().toString();
+    private readonly listener?:(eventType:EventEnum, data?:any)=>void;
     constructor(listener?:(eventType:EventEnum,data?:any)=>void){
         this.player=WSWebRTC.WSPlayer.play2();
+        this.listener=listener;
+        this.skinListener=this.skinListener.bind(this);
         if(listener){
             this.player.listenTo(Event.PLAYER_EVENT,(obj:any)=>{
                 if(!obj) return;
@@ -146,26 +149,28 @@ export class Player {
                         break;
                 }
             });
-            WSWebRTC.WSEmitter.listenTo(Event.SKIN_EVENT, (obj:any) => {
-                if(!obj) return;
-                const {type,message}=obj;
-                if(type === SkinEvent.APPEND) {
-                    const wrap:any=obj.data;
-                    if(message==="Play"){
-                        listener(EventEnum.PlaySuccess,wrap);
-                    }
-                } else if(type === SkinEvent.REMOVE) {
-                    const id=obj.data;
-                    if(message==="Play"){
-                        listener(EventEnum.PlayEnd,id);
-                    }
-                }
-            });
+            WSWebRTC.WSEmitter.listenTo(Event.SKIN_EVENT, this.skinListener);
         }
         PlayerMap.set(this.id,this);
     }
+    private skinListener(obj:any){
+        if(!obj) return;
+            const {type,message}=obj;
+        if(type === SkinEvent.APPEND) {
+            const wrap:any=obj.data;
+            if(message==="Play"){
+                this.listener&&this.listener(EventEnum.PlaySuccess,wrap);
+            }
+        } else if(type === SkinEvent.REMOVE) {
+            const id=obj.data;
+            if(message==="Play"){
+                this.listener&&this.listener(EventEnum.PlayEnd,id);
+            }
+        }
+    }
     public play(url:string,seiCallback?:(timestamp:number)=>void,urlCallback?:(callback:Function)=>void){
         this.player.play({
+            userId:this.id,
             isLiveCatch: true,
             url: url,
             seiConfig: {
@@ -184,6 +189,7 @@ export class Player {
         this.player.stop();
         this.player=undefined as any;
         PlayerMap.delete(this.id);
+        WSWebRTC.WSEmitter.removeTo(Event.SKIN_EVENT,this.skinListener);
     }
 }
 
