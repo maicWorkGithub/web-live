@@ -292,6 +292,8 @@ class WsRtc extends EventBus implements ILiveInterface{
             default: break;
         }
     }
+    private channelPushEvent:any;
+    private pushEventListener:any;
     public init(config:IWsRtcConfig): void {
         this.host=config.host;
         this.appId=config.appId;
@@ -319,6 +321,7 @@ class WsRtc extends EventBus implements ILiveInterface{
                 if(rsp.code === 0) {
                     WSWebRTC.WSChannel.init({});
                     WSWebRTC.WSEmitter.listenTo(Event.SKIN_EVENT,this.skinEventListener.bind(this));
+                 
                     if(this.userRole===0){
                         WSWebRTC.WSEmitter.listenTo(Event.CHANNEL_EVENT, this.channelEventListener.bind(this));
                     }
@@ -352,6 +355,59 @@ class WsRtc extends EventBus implements ILiveInterface{
                 }
             };
             WSWebRTC.WSEmitter.listenTo(Event.CHANNEL_EVENT,this.createChannelEventListener);
+            this.channelPushEvent=(obj:any)=>{
+                if (!obj) return;
+                const {type} = obj;
+                switch(type) {
+                    case PushEvent.PEER_CONN_SWITCH_EVENT: {
+                        console.log("TCP force start.....................");
+                        WSWebRTC.WSChannel.destroyChannel();
+                        WSWebRTC.WSChannel.createChannel(
+                            this.channelId,
+                            this.userId,
+                            {
+                                streamConfig: {
+                                    isMix: mix,
+                                    isMixCheck:true,
+                                    isSei: sei,
+                                    isMirror:false,
+                                    isTrackDetect:true,
+                                    videoType:"H264",
+                                    camConfig: {
+                                        video:cameraId?{
+                                            profile:profile,
+                                            bitrate:bitrate,
+                                            framerate:framerate,
+                                            deviceId:cameraId,
+                                            isBrControl:isBrControl,
+                                            brFactor:brFactor
+                                        }:false,
+                                        audio:audioId?{
+                                            deviceId:audioId,
+                                            bitrate:bitrate,
+                                            echoCancellation
+                                        }:false
+                                    },
+                                    mixConfig: mix?{
+                                        idle,
+                                        sei: sei,
+                                        layoutIndex: 0,
+                                        layout: 0,
+                                        resolution,
+                                        fill: 0,
+                                        roomUrl: this.mixPath,
+                                        framerate: framerate,
+                                        layout_content:layoutContent
+                                    }:undefined,
+                                    networkConfig:{isDetect:true,enforceTCP:true},
+                                },
+                            }
+                        );
+                    } break;
+                    default: break;
+                }
+            }
+            WSWebRTC.WSEmitter.listenTo(Event.PUSH_STREAM_EVENT, this.channelPushEvent);
             WSWebRTC.WSChannel.createChannel(
                 this.channelId,
                 this.userId,
@@ -400,6 +456,9 @@ class WsRtc extends EventBus implements ILiveInterface{
             if(this.destroyChannelEventListener){
                 WSWebRTC.WSEmitter.removeTo(Event.CHANNEL_EVENT,this.destroyChannelEventListener);
             }
+            if(this.channelPushEvent){
+                WSWebRTC.WSEmitter.removeTo(Event.PUSH_STREAM_EVENT,this.channelPushEvent);
+            }
             this.destroyChannelEventListener=(obj:any)=>{
                 if(!obj) return;
                 const {type,code}=obj;
@@ -443,6 +502,47 @@ class WsRtc extends EventBus implements ILiveInterface{
             };
             WSWebRTC.WSEmitter.listenTo(Event.CHANNEL_EVENT,this.joinChannelEventListener);
             const {cameraId,audioId,profile,bitrate=400,framerate=25,isBrControl=true,brFactor=0.6,echoCancellation=true} = channelConfig;
+            this.pushEventListener=(obj:any)=>{
+                if (!obj) return;
+                const {type} = obj;
+                switch(type) {
+                    case PushEvent.PEER_CONN_SWITCH_EVENT: {
+                        console.log("TCP force start.....................");
+                        WSWebRTC.WSChannel.quitChannel();
+                        WSWebRTC.WSChannel.joinChannel(
+                            this.channelId,
+                            this.userId,
+                            {
+                                isDirectLink:true,
+                                streamConfig:{
+                                    isMix:true,
+                                    isMirror:false,
+                                    isTrackDetect:true,
+                                    videoType:"H264",
+                                    camConfig:{
+                                        video:cameraId?{
+                                            profile:profile,
+                                            bitrate:bitrate,
+                                            framerate:framerate,
+                                            deviceId:cameraId,
+                                            isBrControl:isBrControl,
+                                            brFactor:brFactor
+                                        }:false,
+                                        audio:audioId?{
+                                            deviceId:audioId,
+                                            bitrate:bitrate,
+                                            echoCancellation:echoCancellation
+                                        }:false,
+                                    },
+                                    networkConfig:{isDetect:true,enforceTCP:true},
+                                },
+                            }
+                        );
+                    } break;
+                    default: break;
+                }
+            };
+            WSWebRTC.WSEmitter.listenTo(Event.PUSH_STREAM_EVENT, this.pushEventListener);
             WSWebRTC.WSChannel.joinChannel(
                 this.channelId,
                 this.userId,
@@ -476,6 +576,14 @@ class WsRtc extends EventBus implements ILiveInterface{
     }
     public leaveChannel():Promise<boolean>{
         return new Promise((resole,reject)=>{
+            if(this.pushEventListener){
+                WSWebRTC.WSEmitter.removeTo(Event.PUSH_STREAM_EVENT, this.pushEventListener);
+                this.pushEventListener=undefined;
+            }
+            if(this.joinChannelEventListener){
+                WSWebRTC.WSEmitter.removeTo(Event.CHANNEL_EVENT,this.joinChannelEventListener);
+                this.joinChannelEventListener=undefined as any;
+            }
             WSWebRTC.WSChannel.quitChannel();
             resole(true);
         });
