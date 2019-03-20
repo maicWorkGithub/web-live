@@ -385,7 +385,7 @@ class WsRtc extends EventBus implements ILiveInterface{
                                             },
                                             mixConfig: mix?{
                                                 idle,
-                                                sei: sei,
+                                                sei: sei?1:0,
                                                 layoutIndex: 0,
                                                 layout: 0,
                                                 resolution,
