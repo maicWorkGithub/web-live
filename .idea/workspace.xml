@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="770b1a9c-eb53-4e8f-b166-299ca540b60d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/wsrtc/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/wsrtc/index.ts" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -40,8 +41,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/package.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="57">
-              <caret line="3" selection-start-line="3" selection-end-line="3" />
+            <state relative-caret-position="38">
+              <caret line="2" column="21" selection-start-line="2" selection-start-column="21" selection-end-line="2" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -74,18 +75,6 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/wsrtc/index.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2737">
-              <caret line="384" column="46" lean-forward="true" selection-start-line="384" selection-start-column="46" selection-end-line="384" selection-end-column="46" />
-              <folding>
-                <element signature="e#192#242#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/wsrtc/wsrtc.min.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1007">
@@ -97,6 +86,19 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/adapter.js">
           <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/wsrtc/index.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="443">
+              <caret line="450" column="5" lean-forward="true" selection-start-line="450" selection-start-column="5" selection-end-line="450" selection-end-column="5" />
+              <folding>
+                <element signature="e#192#242#0" expanded="true" />
+                <element signature="e#11018#14782#0" />
+              </folding>
+            </state>
+          </provider>
         </entry>
       </file>
     </leaf>
@@ -111,8 +113,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>export</find>
-      <find>playEventListener</find>
       <find>listenTo</find>
       <find>playExtraEventListener</find>
       <find>PlaySuccess</find>
@@ -140,6 +140,8 @@
       <find>createChannelEventListener</find>
       <find>this.player</find>
       <find>destroy</find>
+      <find>mixPath</find>
+      <find>maxBitrate</find>
       <find>createChannel</find>
     </findStrings>
     <replaceStrings>
@@ -200,13 +202,14 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="D:/Node/setup/node" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="yarn" />
     <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
-    <property name="ts.external.directory.path" value="C:\Project\web-live\node_modules\typescript\lib" />
+    <property name="ts.external.directory.path" value="D:\projects\web-live\node_modules\typescript\lib" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -279,20 +282,25 @@
       <workItem from="1550136986805" duration="562000" />
       <workItem from="1550539015461" duration="1454000" />
       <workItem from="1553054656045" duration="7000" />
-      <workItem from="1553057091414" duration="199000" />
+      <workItem from="1553057091414" duration="1959000" />
+      <workItem from="1554258587134" duration="1029000" />
+      <workItem from="1554267482885" duration="982000" />
+      <workItem from="1554973378827" duration="192000" />
+      <workItem from="1554973583083" duration="881000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="82735000" />
+    <option name="totallyTimeSpent" value="87579000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1918" height="1048" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.393972" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20775028" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info id="npm" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -304,7 +312,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Code Review" order="9" />
       <window_info anchor="bottom" id="TypeScript" order="10" />
-      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.4994618" weight="0.51584697" />
+      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.4994618" weight="0.27213115" />
       <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.50053823" side_tool="true" weight="0.5229759" />
       <window_info anchor="bottom" id="Compute Code Lines" order="13" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -406,18 +414,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/wsrtc/index.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2737">
-          <caret line="384" column="46" lean-forward="true" selection-start-line="384" selection-start-column="46" selection-end-line="384" selection-end-column="46" />
+        <state relative-caret-position="443">
+          <caret line="450" column="5" lean-forward="true" selection-start-line="450" selection-start-column="5" selection-end-line="450" selection-end-column="5" />
           <folding>
             <element signature="e#192#242#0" expanded="true" />
+            <element signature="e#11018#14782#0" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="3" selection-start-line="3" selection-end-line="3" />
+        <state relative-caret-position="38">
+          <caret line="2" column="21" selection-start-line="2" selection-start-column="21" selection-end-line="2" selection-end-column="21" />
         </state>
       </provider>
     </entry>

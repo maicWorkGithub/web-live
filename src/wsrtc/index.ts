@@ -433,14 +433,15 @@ class WsRtc extends EventBus implements ILiveInterface{
                         },
                         mixConfig: mix?{
                             idle,
-                            sei: sei,
+                            sei: sei?1:0,
                             layoutIndex: 0,
                             layout: 0,
                             resolution,
                             fill: 0,
                             roomUrl: this.mixPath,
                             framerate: framerate,
-                            layout_content:layoutContent
+                            layout_content:layoutContent,
+                            maxBitrate:bitrate*1.5
                         }:undefined,
                         networkConfig:{isDetect:true,enforceTCP:false},
                     },
