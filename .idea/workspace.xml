@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="770b1a9c-eb53-4e8f-b166-299ca540b60d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/wsrtc/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/wsrtc/index.ts" afterDir="false" />
-    </list>
+    <list default="true" id="770b1a9c-eb53-4e8f-b166-299ca540b60d" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -20,7 +16,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/index.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1254">
+            <state relative-caret-position="1083">
               <caret line="66" column="31" selection-start-line="66" selection-start-column="31" selection-end-line="66" selection-end-column="31" />
               <folding>
                 <element signature="e#0#43#0" expanded="true" />
@@ -92,7 +88,7 @@
         <entry file="file://$PROJECT_DIR$/src/wsrtc/index.ts">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="443">
-              <caret line="450" column="5" lean-forward="true" selection-start-line="450" selection-start-column="5" selection-end-line="450" selection-end-column="5" />
+              <caret line="435" column="41" lean-forward="true" selection-start-line="435" selection-start-column="41" selection-end-line="435" selection-end-column="41" />
               <folding>
                 <element signature="e#192#242#0" expanded="true" />
                 <element signature="e#11018#14782#0" />
@@ -286,18 +282,19 @@
       <workItem from="1554258587134" duration="1029000" />
       <workItem from="1554267482885" duration="982000" />
       <workItem from="1554973378827" duration="192000" />
-      <workItem from="1554973583083" duration="881000" />
+      <workItem from="1554973583083" duration="1199000" />
+      <workItem from="1555037973523" duration="29000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="87579000" />
+    <option name="totallyTimeSpent" value="87926000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1918" height="1048" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20775028" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20990312" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info id="npm" order="3" side_tool="true" />
@@ -309,10 +306,10 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Version Control" order="8" weight="0.32932165" />
       <window_info anchor="bottom" id="Code Review" order="9" />
       <window_info anchor="bottom" id="TypeScript" order="10" />
-      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.4994618" weight="0.27213115" />
+      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.4994618" weight="0.38469946" />
       <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.50053823" side_tool="true" weight="0.5229759" />
       <window_info anchor="bottom" id="Compute Code Lines" order="13" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -366,7 +363,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/index.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1254">
+        <state relative-caret-position="1083">
           <caret line="66" column="31" selection-start-line="66" selection-start-column="31" selection-end-line="66" selection-end-column="31" />
           <folding>
             <element signature="e#0#43#0" expanded="true" />
@@ -415,7 +412,7 @@
     <entry file="file://$PROJECT_DIR$/src/wsrtc/index.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="443">
-          <caret line="450" column="5" lean-forward="true" selection-start-line="450" selection-start-column="5" selection-end-line="450" selection-end-column="5" />
+          <caret line="435" column="41" lean-forward="true" selection-start-line="435" selection-start-column="41" selection-end-line="435" selection-end-column="41" />
           <folding>
             <element signature="e#192#242#0" expanded="true" />
             <element signature="e#11018#14782#0" />
