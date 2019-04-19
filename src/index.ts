@@ -8,6 +8,7 @@ import {
     WsRtc,
 } from './wsrtc';
 import {EventBus} from './EventBus';
+import {IPushConfig} from './wsrtc/wswebrtc';
 
 // @ts-ignore
 require("./adapter.js");
@@ -77,6 +78,9 @@ class WebLive extends EventBus implements ILiveInterface{
     }
     public destroy(){
         return WsRtcInstance.destroy();
+    }
+    public startScreenCapture(config:IPushConfig){
+        return WsRtcInstance.startScreenCapture(config);
     }
 }
 

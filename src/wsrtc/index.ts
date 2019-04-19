@@ -5,7 +5,7 @@
  * @Last Modified time: 2018/12/7 12:14
  * @disc:网宿连麦 sdk
  */
-import {IExtraPlayer, WSWebRTC} from './wswebrtc';
+import {IExtraPlayer, WSWebRTC, IPushConfig} from './wswebrtc';
 import {ILiveInterface} from '../interface';
 import {EventBus} from '../EventBus';
 
@@ -690,6 +690,11 @@ class WsRtc extends EventBus implements ILiveInterface{
         PlayerMap.forEach((player)=>{
             player.destroy();
         })
+    }
+    
+    
+    public startScreenCapture(config:IPushConfig){
+        WSWebRTC.WSPusher.startPush(config);
     }
 }
 

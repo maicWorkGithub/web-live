@@ -287,6 +287,35 @@ declare class WSEvent{
 }
 
 
+declare interface IScreenConfig{
+    enable:boolean;
+    isMixOutAudio:boolean;
+    isMixInAudio:boolean;
+    isMixInOutAudio:boolean;
+}
+
+
+export declare interface IPushConfig{
+    channelId:string;
+    userId:string;
+    url:string;
+    userRole:0|1;
+    isSei:boolean;
+    isMirror:boolean;
+    enableCustom:boolean;
+    videoType:"VP8"|"H264";
+    camConfig?:CamConfig,
+    watermarkConfig?:IWatermarkConfig;
+    mixAudioConfig?:IMixAudioConfig;
+    screenConfig?:IScreenConfig;
+    networkConfig?:INetworkConfig;
+}
+
+declare class WSPusher{
+    startPush(config:IPushConfig):void;
+    stopPush():void;
+}
+
 
 
 declare class WSWebRTC{
@@ -299,6 +328,7 @@ declare class WSWebRTC{
     public static WSMixer:WSMixer;
     public static WSUtil:WSUtil;
     public static WSEvent:WSEvent;
+    public static WSPusher:WSPusher;
 }
 
 
